@@ -1,8 +1,5 @@
 function RoomDetailsPage() {
-    return(
-        <>
-        </>
-    ) 
+  return <></>;
 }
 
-export default RoomDetailsPage
+export default RoomDetailsPage;

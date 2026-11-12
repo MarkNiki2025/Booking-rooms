@@ -1,4 +1,9 @@
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  serverTimestamp,
+  writeBatch,
+} from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 interface NewRoom {
@@ -11,11 +16,24 @@ export async function createRoom(
   data: NewRoom,
   createdBy: string
 ): Promise<string> {
-  const docRef = await addDoc(collection(db, "rooms"), {
-    ...data,
+  const roomRef = doc(collection(db, "rooms"));
+  const batch = writeBatch(db);
+
+  batch.set(roomRef, {
+    name: data.name,
+    description: data.description,
     createdBy,
     createdAt: serverTimestamp(),
   });
 
-  return docRef.id;
+  const memberUids = new Set([...data.members, createdBy]);
+  memberUids.forEach((uid) => {
+    batch.set(doc(db, "rooms", roomRef.id, "members", uid), {
+      role: uid === createdBy ? "owner" : "member",
+      addedAt: serverTimestamp(),
+    });
+  });
+
+  await batch.commit();
+  return roomRef.id;
 }

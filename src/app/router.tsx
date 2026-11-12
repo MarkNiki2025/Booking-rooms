@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import DashboardPage from "@/pages/DashboardPage";
+import RoomsPage from "@/pages/RoomsPage";
 import RoomDetailsPage from "@/pages/RoomDetailsPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 
@@ -19,6 +20,10 @@ export const router = createBrowserRouter([
           {
             path: "/dashboard",
             element: <DashboardPage />,
+          },
+          {
+            path: "/rooms",
+            element: <RoomsPage />,
           },
           {
             path: "/rooms/:roomId",

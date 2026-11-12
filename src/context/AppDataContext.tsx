@@ -3,22 +3,22 @@ import {
   createContext,
   useContext,
   useEffect,
+  useCallback,
   useState,
   type ReactNode,
 } from "react";
 
 import { useAuth } from "@/context/AuthContext";
-import { getRooms } from "@/service/roomsService";
+import { getRooms, type AccessibleRoom } from "@/service/roomsService";
 import { getBookings } from "@/service/bookingService";
 import { getUsers } from "@/service/usersService";
 import type { WithId } from "@/types";
 
-import type { IRoom } from "@/types/room";
 import type { IBooking } from "@/types/booking";
 import type { IUser } from "@/types/user";
 
 interface AppDataContextType {
-  rooms: WithId<IRoom>[];
+  rooms: AccessibleRoom[];
   bookings: WithId<IBooking>[];
   loading: boolean;
   users: WithId<IUser>[];
@@ -32,43 +32,46 @@ const AppDataContext = createContext<AppDataContextType | undefined>(
 export function AppDataProvider({ children }: { children: ReactNode }) {
   const { user, loading: authLoading } = useAuth();
 
-  const [rooms, setRooms] = useState<WithId<IRoom>[]>([]);
+  const [rooms, setRooms] = useState<AccessibleRoom[]>([]);
   const [bookings, setBookings] = useState<WithId<IBooking>[]>([]);
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<WithId<IUser>[]>([]);
-  async function refreshData() {
-    if (!user) return;
-
-    setLoading(true);
-
-    try {
-      const [roomsData, bookingsData, usersData] = await Promise.all([
-        getRooms(),
-        getBookings(),
-        getUsers(),
-      ]);
-      setUsers(usersData);
-      setRooms(roomsData);
-      setBookings(bookingsData);
-    } catch (error) {
-      console.error("Error loading app data:", error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    if (authLoading) return;
-
+  const refreshData = useCallback(async () => {
     if (!user) {
       setRooms([]);
       setBookings([]);
+      setUsers([]);
       setLoading(false);
       return;
     }
 
-    refreshData();
-  }, [user, authLoading]);
+    setLoading(true);
+
+    try {
+  const roomsData = await getRooms(user.uid);
+  console.log("Rooms:", roomsData);
+
+  const bookingsData = await getBookings();
+  console.log("Bookings:", bookingsData);
+
+  const usersData = await getUsers();
+  console.log("Users:", usersData);
+
+  setRooms(roomsData);
+  setBookings(bookingsData);
+  setUsers(usersData);
+} finally {
+  setLoading(false);
+}
+  }, [user]);
+
+  useEffect(() => {
+    if (authLoading) return;
+
+    void refreshData().catch((error: unknown) => {
+      console.error("Error loading app data:", error);
+    });
+  }, [authLoading, refreshData]);
 
   return (
     <AppDataContext.Provider
