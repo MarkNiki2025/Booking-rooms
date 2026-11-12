@@ -83,7 +83,6 @@ function CreateRoomModal({
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Room name */}
           <div className="space-y-2">
             <Label htmlFor="room-name">Room name</Label>
 
@@ -96,7 +95,6 @@ function CreateRoomModal({
             />
           </div>
 
-          {/* Description */}
           <div className="space-y-2">
             <Label htmlFor="room-description">Description</Label>
 
@@ -109,7 +107,6 @@ function CreateRoomModal({
             />
           </div>
 
-          {/* Members dropdown */}
           <div className="space-y-2">
             <Label>Room members</Label>
 
@@ -163,12 +160,10 @@ function CreateRoomModal({
             </p>
           </div>
 
-          {/* Error */}
           {error && (
             <p className="text-sm text-destructive">{error}</p>
           )}
 
-          {/* Actions */}
           <div className="flex justify-end gap-2">
             <Button
               type="button"

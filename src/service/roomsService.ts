@@ -44,6 +44,7 @@ export async function getRooms(userUid: string): Promise<AccessibleRoom[]> {
         description: data.description,
         createdBy: data.createdBy,
         createdAt: data.createdAt,
+        nameOfOwner: data.nameOfOwner ?? "",
         memberRole: role,
       };
     })

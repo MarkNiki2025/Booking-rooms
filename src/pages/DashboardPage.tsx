@@ -26,9 +26,13 @@ function DashboardPage() {
     description: string;
     members: string[];
     }) => {
-    if (!user) return;
-
-    await createRoom(data, user.uid);
+    if (!user) throw new Error("You must be signed in to create a room.");
+    const ownerName =
+      user.displayName?.trim() ||
+      users.find((profile) => profile.id === user.uid)?.name.trim() ||
+      user.email ||
+      "User";
+    await createRoom(data, user.uid, ownerName);
     await refreshData();
     handleClose();
   };
@@ -38,7 +42,7 @@ function DashboardPage() {
   }
 
   const myBookings = bookings.filter(
-    (booking) => booking.createdBy === user?.uid
+    (booking) => booking.createdBy === user?.displayName
   );
 
   const upcomingBookings = myBookings

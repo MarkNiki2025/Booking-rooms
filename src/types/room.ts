@@ -7,6 +7,7 @@ export interface IRoom {
   description: string;
   createdBy: string;
   createdAt: Timestamp;
+  nameOfOwner: string;
 }
 
 export interface IRoomMember {
@@ -14,4 +15,3 @@ export interface IRoomMember {
   role: RoomMemberRole;
   addedAt: Timestamp;
 }
-

@@ -38,7 +38,12 @@ export default function RoomsPage() {
     members: string[];
   }) {
     if (!user) throw new Error("You must be signed in to create a room.");
-    await createRoom(data, user.uid);
+    const ownerName =
+      user.displayName?.trim() ||
+      users.find((profile) => profile.id === user.uid)?.name.trim() ||
+      user.email ||
+      "User";
+    await createRoom(data, user.uid, ownerName);
     await refreshData();
   }
 

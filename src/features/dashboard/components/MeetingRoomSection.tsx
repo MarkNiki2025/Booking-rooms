@@ -9,7 +9,6 @@ import {
 
 import type { IRoom } from "@/types/room";
 import type { WithId } from "@/types";
-
 interface MeetingRoomsSectionProps {
   rooms: WithId<IRoom>[];
 }
@@ -33,7 +32,7 @@ function MeetingRoomsSection({ rooms }: MeetingRoomsSectionProps) {
 
             <CardContent>
               <p className="text-sm text-muted-foreground">
-                Created by: {room.createdBy}
+                Created by: {room.nameOfOwner}
               </p>
             </CardContent>
           </Card>
