@@ -1,4 +1,4 @@
-import LoginCard from "./LoginCard";
+import LoginCard from "@/features/auth/components/LoginCard";
 function LoginPage() {
   // const [isCreate, setIsCreate] = useState(false);
   // const handleIsCreateTrue = () => {

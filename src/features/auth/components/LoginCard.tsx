@@ -11,11 +11,32 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useNavigate } from "react-router";
-interface LoginCardProps {
-
-}
+import { useState } from "react";
+import type { SubmitEvent } from "react";
+import { loginUser } from "../services/authService";
 function LoginCard() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogIn = async (e: SubmitEvent) => {
+    e.preventDefault();
+  
+    try {
+      loginUser(email,password)
+      .then(() => {
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.error(error);
+        setError("Login failed");
+      })
+      } catch (error) {
+        setError("Login failed");
+        console.error(error);
+      }
+  };
   return (
     <Card className="w-full max-w-sm p-3">
       <CardHeader>
@@ -26,8 +47,8 @@ function LoginCard() {
         </CardDescription>
         
       </CardHeader>
+      <form onSubmit={handleLogIn}>
       <CardContent>
-        <form>
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
@@ -35,6 +56,8 @@ function LoginCard() {
                 id="email"
                 type="email"
                 placeholder="m@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -48,13 +71,16 @@ function LoginCard() {
                   Forgot your password?
                 </a>
               </div>
-              <Input id="password" type="password" required />
+              <Input id="password"
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)} />
             </div>
           </div>
-        </form>
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="w-full bg-blue-600">
+        <Button type="submit" onSubmit={handleLogIn} className="w-full bg-blue-600 cursor-pointer">
           Login
         </Button>
         <CardAction className="w-full flex justify-center">
@@ -63,7 +89,11 @@ function LoginCard() {
           <Button variant="link" onClick={() => navigate("/register")} className="text-blue-900 underline cursor-pointer" >Create one</Button>
           </p>
         </CardAction>
+         {error && (
+              <p className="text-sm text-red-500">{error}</p>
+            )}
       </CardFooter>
+      </form>
     </Card>
   )
 }
