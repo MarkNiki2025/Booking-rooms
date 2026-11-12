@@ -48,21 +48,18 @@ export function AppDataProvider({ children }: { children: ReactNode }) {
     setLoading(true);
 
     try {
-  const roomsData = await getRooms(user.uid);
-  console.log("Rooms:", roomsData);
+      const roomsData = await getRooms(user.uid);
+      const [bookingsData, usersData] = await Promise.all([
+        getBookings(roomsData.map((room) => room.id)),
+        getUsers(),
+      ]);
 
-  const bookingsData = await getBookings();
-  console.log("Bookings:", bookingsData);
-
-  const usersData = await getUsers();
-  console.log("Users:", usersData);
-
-  setRooms(roomsData);
-  setBookings(bookingsData);
-  setUsers(usersData);
-} finally {
-  setLoading(false);
-}
+      setRooms(roomsData);
+      setBookings(bookingsData);
+      setUsers(usersData);
+    } finally {
+      setLoading(false);
+    }
   }, [user]);
 
   useEffect(() => {

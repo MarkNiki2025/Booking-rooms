@@ -1,13 +1,14 @@
 import type { Timestamp } from "firebase/firestore";
 
-export type BookingStatus = "pending" | "confirmed" | "cancelled";
+export type BookingStatus = "active" | "cancelled";
 
 export interface IBooking {
   roomId: string;
-  createdBy: string;
+  userId: string;
   description: string;
   startAt: Timestamp;
   endAt: Timestamp;
   status: BookingStatus;
   createdAt: Timestamp;
+  attendeeIds: string[];
 }

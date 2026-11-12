@@ -12,6 +12,7 @@ import { createRoom } from "@/features/dashboard/services/createRoom";
 function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
   const { rooms, bookings, loading: dataLoading,users, refreshData } = useAppData();
+  const [dashboardTime] = useState(() => Date.now());
   const [isOpen, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -42,13 +43,13 @@ function DashboardPage() {
   }
 
   const myBookings = bookings.filter(
-    (booking) => booking.createdBy === user?.displayName
+    (booking) => booking.userId === user?.uid
   );
 
   const upcomingBookings = myBookings
     .filter(
       (booking) =>
-        booking.startAt.toMillis() > Date.now() &&
+        booking.startAt.toMillis() > dashboardTime &&
         booking.status !== "cancelled"
     )
     .sort(

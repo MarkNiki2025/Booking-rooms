@@ -3,10 +3,11 @@ import { CalendarDays, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { logoutUser } from "@/features/auth/services/authService";
 import { useAuth } from "@/context/AuthContext";
+import { useLocation } from "react-router-dom";
 
 function Header() {
   const { user, loading } = useAuth();
-
+  const location = useLocation();
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -22,15 +23,37 @@ function Header() {
           </span>
         </div>
 
-        {/* Navigation */}
         <nav className="hidden items-center gap-6 md:flex">
-          <a href="/" className="text-sm font-medium text-primary">
+          <a
+            href="/dashboard"
+            className={
+              location.pathname === "/dashboard"
+                ? "font-bold text-primary"
+                : "text-sm text-muted-foreground hover:text-foreground"
+            }
+          >
             Dashboard
           </a>
-          <a href="/rooms" className="text-sm text-muted-foreground hover:text-foreground">
+
+          <a
+            href="/rooms"
+            className={
+              location.pathname === "/rooms"
+                ? "font-bold text-primary"
+                : "text-sm text-muted-foreground hover:text-foreground"
+            }
+          >
             Meeting Rooms
           </a>
-          <a href="/bookings" className="text-sm text-muted-foreground hover:text-foreground">
+
+          <a
+            href="/bookings"
+            className={
+              location.pathname === "/bookings"
+                ? "font-bold text-primary"
+                : "text-sm text-muted-foreground hover:text-foreground"
+            }
+          >
             Bookings
           </a>
         </nav>

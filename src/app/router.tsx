@@ -4,6 +4,7 @@ import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import DashboardPage from "@/pages/DashboardPage";
 import RoomsPage from "@/pages/RoomsPage";
+import BookingsPage from "@/pages/BookingsPage";
 import RoomDetailsPage from "@/pages/RoomDetailsPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
           {
             path: "/rooms/:roomId",
             element: <RoomDetailsPage />,
+          },
+          {
+            path: "/bookings",
+            element: <BookingsPage />,
           },
         ],
       },
