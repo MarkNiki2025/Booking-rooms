@@ -10,6 +10,8 @@ export interface IRoom {
 }
 
 export interface IRoomMember {
+  uid: string;
   role: RoomMemberRole;
   addedAt: Timestamp;
 }
+

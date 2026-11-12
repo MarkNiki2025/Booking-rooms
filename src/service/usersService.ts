@@ -1,19 +1,19 @@
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import type { IRoom } from "@/types/room";
+import type { IUser } from "@/types/user";
+import type { WithId } from "@/types";
 
-export async function getRooms(): Promise<IRoom[]> {
-  const snapshot = await getDocs(collection(db, "rooms"));
+export async function getUsers(): Promise<WithId <IUser>[]> {
+  const snapshot = await getDocs(collection(db, "users"));
 
   return snapshot.docs.map((item) => {
     const data = item.data();
 
     return {
-      id: item.id,
       name: data.name,
-      description: data.description,
-      createdBy: data.createdBy,
+      email: data.email,
       createdAt: data.createdAt,
+      id: item.id
     };
   });
 }
