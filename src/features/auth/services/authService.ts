@@ -7,6 +7,7 @@ import {
   type User,
   type Unsubscribe,
 } from "firebase/auth";
+import { authPersistence } from "@/lib/firebase";
 
 import {
   doc,
@@ -21,6 +22,7 @@ export async function registerUser(
   email: string,
   password: string
 ): Promise<User> {
+  await authPersistence;
   const userCredential = await createUserWithEmailAndPassword(
     auth,
     email,
@@ -46,6 +48,7 @@ export async function loginUser(
   email: string,
   password: string
 ): Promise<User> {
+  await authPersistence;
   const userCredential = await signInWithEmailAndPassword(
     auth,
     email,

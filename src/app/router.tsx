@@ -1,5 +1,5 @@
-import { createBrowserRouter } from "react-router";
-
+import { createBrowserRouter } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import DashboardPage from "@/pages/DashboardPage";
@@ -7,21 +7,30 @@ import RoomDetailsPage from "@/pages/RoomDetailsPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 
 import MainLayout from "@/components/layout/MainLayout";
+import ProtectedRoute from "@/components/shared/ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
-    element: <MainLayout />,
+    element: <ProtectedRoute />,
     children: [
       {
-        index: true,
-        element: <DashboardPage />,
-      },
-      {
-        path: "rooms/:roomId",
-        element: <RoomDetailsPage />,
+        element: <MainLayout />,
+        children: [
+          {
+            path: "/dashboard",
+            element: <DashboardPage />,
+          },
+          {
+            path: "/rooms/:roomId",
+            element: <RoomDetailsPage />,
+          },
+        ],
       },
     ],
+  },
+  {
+    path: "/",
+    element: <Navigate to="/dashboard" replace />,
   },
   {
     path: "/login",
